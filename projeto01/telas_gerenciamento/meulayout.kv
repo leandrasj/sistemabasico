@@ -1,0 +1,39 @@
+#:import hex kivy.utils.get_color_from_hex
+
+# Modern Material Design Colors
+#:set primary_blue (0.098, 0.463, 0.824, 1)  # #1976D2
+#:set secondary_orange (1.0, 0.596, 0.0, 1)  # #FF9800
+#:set accent_purple (0.612, 0.153, 0.690, 1)  # #9C27B0
+#:set success_green (0.298, 0.686, 0.314, 1)  # #4CAF50
+#:set light_grey (0.961, 0.961, 0.961, 1)    # #F5F5F5
+#:set white (1.0, 1.0, 1.0, 1.0)             # #FFFFFF
+#:set dark_text hex('#212121')
+#:set light_text hex('#757575')
+
+# Estilos personalizados básicos
+<CustomCard@MDCard>:
+    elevation: 3
+    md_bg_color: white
+    radius: [15, 15, 15, 15]
+    padding: "20dp"
+    spacing: "15dp"
+
+<ElevatedButton@MDRaisedButton>:
+    elevation: 2
+    font_size: "16sp"
+    size_hint_y: None
+    height: "50dp"
+    radius: [25, 25, 25, 25]
+
+<CustomTextField@MDTextField>:
+    mode: "rectangle"
+    size_hint_y: None
+    height: "60dp"
+    font_size: "16sp"
+
+<TitleLabel@MDLabel>:
+    font_style: "H5"
+    theme_text_color: "Primary"
+    halign: "center"
+    size_hint_y: None
+    height: "60dp"
