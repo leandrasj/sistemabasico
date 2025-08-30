@@ -132,7 +132,7 @@ class TelaLogin(MDScreen):
         btn_cadastro = MDFlatButton(
             text='Não tem conta? Cadastre-se',
             size_hint_y=None,
-            height="40dp",
+            height="50dp",
             theme_text_color="Primary",
             on_press=lambda x: setattr(self.manager, 'current', 'cadastro')
         )
@@ -191,19 +191,19 @@ class TelaCadastro(MDScreen):
 
         # Campos de entrada
         self.usuario_input = MDTextField(
-            hint_text='Novo usuário (mín. 4 caracteres)',
+            hint_text='Novo usuário (mín. 4)',
             mode="rectangle",
             size_hint_y=None,
-            height="60dp",
+            height="30dp",
             icon_right="account-plus"
         )
         
         self.senha_input = MDTextField(
-            hint_text='Nova senha (mín. 6 caracteres)',
+            hint_text='Nova senha (mín. 6)',
             password=True,
             mode="rectangle",
             size_hint_y=None,
-            height="60dp",
+            height="30dp",
             icon_right="lock"
         )
         
@@ -211,7 +211,7 @@ class TelaCadastro(MDScreen):
             hint_text='Seu email (ex: usuario@gmail.com)',
             mode="rectangle",
             size_hint_y=None,
-            height="60dp",
+            height="30dp",
             icon_right="email"
         )
 
@@ -331,7 +331,7 @@ class TelaGerenciamento(MDScreen):
         
         welcome_title = MDLabel(
             text="Sistema de Gerenciamento",
-            font_style="H5",
+            font_style="H6",
             theme_text_color="Primary",
             halign="center"
         )
@@ -583,49 +583,69 @@ class TelaListagem(MDScreen):
             spacing="20dp",
             padding="20dp",
             size_hint_y=None,
-            height="200dp"
+            height="250dp"
         )
         
-        usuario_field = MDTextField(
+        # Armazenar referências aos campos
+        self.usuario_field = MDTextField(
             text=usuario_atual,
             hint_text="Nome do usuário",
-            mode="rectangle"
+            mode="rectangle",
+            size_hint_y=None,
+            height="60dp"
         )
         
-        senha_field = MDTextField(
+        self.senha_field = MDTextField(
             text=senha_atual,
             hint_text="Senha",
-            mode="rectangle"
+            mode="rectangle",
+            password=True,
+            size_hint_y=None,
+            height="60dp"
         )
         
-        content.add_widget(usuario_field)
-        content.add_widget(senha_field)
+        content.add_widget(self.usuario_field)
+        content.add_widget(self.senha_field)
         
-        dialog = MDDialog(
+        self.dialog_editar = MDDialog(
             title="Editar Usuário",
+            type="custom",
             content_cls=content,
             buttons=[
                 MDFlatButton(
                     text="CANCELAR",
                     theme_text_color="Primary",
-                    on_press=lambda x: dialog.dismiss()
+                    on_press=lambda x: self.dialog_editar.dismiss()
                 ),
                 MDRaisedButton(
                     text="SALVAR",
                     md_bg_color="#1976D2",
-                    on_press=lambda x: self.salvar_edicao(usuario_id, usuario_field.text, senha_field.text, dialog)
+                    on_press=lambda x: self.salvar_edicao(usuario_id)
                 ),
             ],
         )
-        dialog.open()
+        self.dialog_editar.open()
 
-    def salvar_edicao(self, usuario_id, novo_usuario, nova_senha, dialog):
+    def salvar_edicao(self, usuario_id):
+        # Acessar os valores dos campos
+        novo_usuario = self.usuario_field.text.strip()
+        nova_senha = self.senha_field.text.strip()
+        
+        # Validar campos
+        if not novo_usuario or not nova_senha:
+            # Mostrar mensagem de erro se campos estiverem vazios
+            return
+        
+        # Atualizar no banco de dados
         conn = sqlite3.connect('banco.db')
         cursor = conn.cursor()
-        cursor.execute("UPDATE usuarios SET usuario=?, senha=? WHERE id=?", (novo_usuario, nova_senha, usuario_id))
+        cursor.execute("UPDATE usuarios SET usuario=?, senha=? WHERE id=?", 
+                      (novo_usuario, nova_senha, usuario_id))
         conn.commit()
         conn.close()
-        dialog.dismiss()
+        
+        # Fechar dialog e atualizar lista
+        self.dialog_editar.dismiss()
         self.atualizar_lista()
 
 # APLICATIVO PRINCIPAL
@@ -647,7 +667,6 @@ class MeuApp(MDApp):
         sm.add_widget(TelaServicos(name='servicos')) 
         sm.add_widget(ListagemServicos(name='listagem_servicos'))
         return sm
-
 
 # EXECUTAR
 if __name__ == '__main__':

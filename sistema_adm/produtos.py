@@ -125,6 +125,7 @@ class TelaProdutos(MDScreen):
             self.mensagem.text = 'Preencha todos os campos!'
             self.mensagem.theme_text_color = "Error"
             
+# LISTAGEM DE SERVICOS
 class ListagemProdutos(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -285,49 +286,68 @@ class ListagemProdutos(MDScreen):
             spacing="20dp",
             padding="20dp",
             size_hint_y=None,
-            height="200dp"
+            height="250dp"
         )
         
-        nome_field = MDTextField(
+        # Armazenar referências aos campos
+        self.nome_field = MDTextField(
             text=nome_atual,
             hint_text="Nome do produto",
-            mode="rectangle"
+            mode="rectangle",
+            size_hint_y=None,
+            height="60dp"
         )
         
-        descricao_field = MDTextField(
+        self.descricao_field = MDTextField(
             text=descricao_atual,
             hint_text="Descrição",
-            mode="rectangle"
+            mode="rectangle",
+            size_hint_y=None,
+            height="60dp"
         )
         
-        content.add_widget(nome_field)
-        content.add_widget(descricao_field)
+        content.add_widget(self.nome_field)
+        content.add_widget(self.descricao_field)
         
-        dialog = MDDialog(
+        self.dialog_editar = MDDialog(
             title="Editar Produto",
+            type="custom",
             content_cls=content,
             buttons=[
                 MDFlatButton(
                     text="CANCELAR",
                     theme_text_color="Primary",
-                    on_press=lambda x: dialog.dismiss()
+                    on_press=lambda x: self.dialog_editar.dismiss()
                 ),
                 MDRaisedButton(
                     text="SALVAR",
                     md_bg_color="#FF9800",
-                    on_press=lambda x: self.salvar_edicao(produto_id, nome_field.text, descricao_field.text, dialog)
+                    on_press=lambda x: self.salvar_edicao(produto_id)
                 ),
             ],
         )
-        dialog.open()
+        self.dialog_editar.open()
 
-    def salvar_edicao(self, produto_id, novo_nome, nova_descricao, dialog):
+    def salvar_edicao(self, produto_id):
+        # Acessar os valores dos campos
+        novo_nome = self.nome_field.text.strip()
+        nova_descricao = self.descricao_field.text.strip()
+        
+        # Validar campos
+        if not novo_nome or not nova_descricao:
+            # Mostrar mensagem de erro se campos estiverem vazios
+            return
+        
+        # Atualizar no banco de dados
         conn = sqlite3.connect('banco.db')
         cursor = conn.cursor()
-        cursor.execute("UPDATE produto SET nome=?, descricao=? WHERE id=?", (novo_nome, nova_descricao, produto_id))
+        cursor.execute("UPDATE produto SET nome=?, descricao=? WHERE id=?", 
+                      (novo_nome, nova_descricao, produto_id))
         conn.commit()
         conn.close()
-        dialog.dismiss()
+        
+        # Fechar dialog e atualizar lista
+        self.dialog_editar.dismiss()
         self.atualizar_lista()
         
 # CADASTRO DE SERVICOS 
@@ -431,6 +451,7 @@ class TelaServicos(MDScreen):
             self.mensagem.text = 'Preencha a descrição do serviço!'
             self.mensagem.theme_text_color = "Error"
 
+# LISTAGEM DE SERVICOS
 class ListagemServicos(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -581,40 +602,56 @@ class ListagemServicos(MDScreen):
             spacing="20dp",
             padding="20dp",
             size_hint_y=None,
-            height="150dp"
+            height="200dp"
         )
         
-        descricao_field = MDTextField(
+        # Armazenar referência ao campo
+        self.descricao_field = MDTextField(
             text=descricao_atual,
             hint_text="Descrição do serviço",
-            mode="rectangle"
+            mode="rectangle",
+            size_hint_y=None,
+            height="60dp"
         )
         
-        content.add_widget(descricao_field)
+        content.add_widget(self.descricao_field)
         
-        dialog = MDDialog(
+        self.dialog_editar = MDDialog(
             title="Editar Serviço",
+            type="custom",
             content_cls=content,
             buttons=[
                 MDFlatButton(
                     text="CANCELAR",
                     theme_text_color="Primary",
-                    on_press=lambda x: dialog.dismiss()
+                    on_press=lambda x: self.dialog_editar.dismiss()
                 ),
                 MDRaisedButton(
                     text="SALVAR",
                     md_bg_color="#9C27B0",
-                    on_press=lambda x: self.salvar_edicao(servico_id, descricao_field.text, dialog)
+                    on_press=lambda x: self.salvar_edicao(servico_id)
                 ),
             ],
         )
-        dialog.open()
+        self.dialog_editar.open()
 
-    def salvar_edicao(self, servico_id, nova_descricao, dialog):
+    def salvar_edicao(self, servico_id):
+        # Acessar o valor do campo
+        nova_descricao = self.descricao_field.text.strip()
+        
+        # Validar campo
+        if not nova_descricao:
+            # Mostrar mensagem de erro se campo estiver vazio
+            return
+        
+        # Atualizar no banco de dados
         conn = sqlite3.connect('banco.db')
         cursor = conn.cursor()
-        cursor.execute("UPDATE servicos SET descricao=? WHERE id=?", (nova_descricao, servico_id))
+        cursor.execute("UPDATE servicos SET descricao=? WHERE id=?", 
+                      (nova_descricao, servico_id))
         conn.commit()
         conn.close()
-        dialog.dismiss()
+        
+        # Fechar dialog e atualizar lista
+        self.dialog_editar.dismiss()
         self.atualizar_lista()
