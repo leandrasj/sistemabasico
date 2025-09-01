@@ -37,8 +37,6 @@ Este é um **aplicativo mobile multiplataforma** desenvolvido para demonstrar ha
 ├── 📄 main.py                    # Aplicação principal e telas base
 ├── 📄 produtos.py               # Módulo de produtos e serviços
 ├── 🗃️ banco.db                 # Banco de dados SQLite
-├── 📁 img/
-│   └── 🖼️ logo.png            # Logo da aplicação
 └── 📁 telas_gerenciamento/
     └── 📄 meulayout.kv         # Estilos e temas
 ```
@@ -116,33 +114,6 @@ cd versao_atual
 python main.py
 ```
 
-## 📈 Melhorias Implementadas
-
-Esta versão "Portfolio Edition" inclui as seguintes melhorias visuais e funcionais:
-
-### 🎨 Interface
-- ✅ Migração completa para KivyMD
-- ✅ Implementação do Material Design 3.0
-- ✅ Paleta de cores moderna e consistente
-- ✅ Cards com elevação e sombras
-- ✅ Ícones vetoriais integrados
-
-### 📱 UX/UI
-- ✅ Toolbar com navegação clara
-- ✅ Feedback visual em todas as ações
-- ✅ Diálogos modais para edição
-- ✅ Validação de formulários em tempo real
-- ✅ Mensagens de erro/sucesso estilizadas
-
-### 🔧 Código
-- ✅ Arquitetura modular organizada
-- ✅ Tratamento robusto de erros
-- ✅ Código comentado e documentado
-- ✅ Boas práticas de desenvolvimento
-- ✅ Compatibilidade multiplataforma
-
-## 📋 Casos de Uso
-
 Este aplicativo demonstra competências em:
 
 - **Desenvolvimento Mobile**: Criação de apps nativos com Python
@@ -155,10 +126,6 @@ Este aplicativo demonstra competências em:
 ## 🤝 Contribuições
 
 Este projeto foi desenvolvido como demonstração de habilidades em desenvolvimento mobile. Sugestões e melhorias são sempre bem-vindas!
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
